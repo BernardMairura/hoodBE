@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'authentication',
     'hoodapp',
     'django.contrib.admin',
     'django.contrib.auth',
