@@ -115,3 +115,36 @@ class Neighborhood(models.Model):
     @classmethod
     def find_neighborhood(cls, neighborhood_id):
         return cls.objects.filter(id=neighborhood_id)
+
+
+
+class Business(models.Model):
+    name = models.CharField(max_length=120)
+    email = models.EmailField(max_length=254)
+    body = models.TextField(max_length=100, blank=True)
+    hood_id = models.ForeignKey("Neighborhood", on_delete=models.CASCADE, related_name='business')
+    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True, related_name='neighbor_profile')
+    location = models.CharField(max_length=60)
+
+    def __str__(self):
+        return f'{self.name} Business'
+
+    def create_business(self):
+        self.save()
+
+    def delete_business(self):
+        self.delete()
+
+    @classmethod
+    def search_business(cls, name):
+        return cls.objects.filter(name__icontains=name).all()
+
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:  
+            if instance.is_manager:  
+                Business.objects.create(user=instance) 
+
+            else:
+                pass
