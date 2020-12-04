@@ -63,3 +63,28 @@ class SuperuserProfile(models.Model):
             else:
                 pass
     
+
+class OccupantProfile(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True, related_name='neighbor_profile')
+    first_name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
+    email = models.EmailField(max_length=254,null=True)
+    location=models.CharField(max_length=30,blank=True)
+    bio =models.TextField(max_length=100, blank=True)
+    prof_picture= CloudinaryField('image')
+    contact = models.CharField(max_length=15, blank=True)
+    date_created=models.DateTimeField(auto_now_add=True)
+    hoodname = models.ForeignKey("Neighborhood", on_delete=models.CASCADE,related_name='home', null=True)
+
+    def __str__(self):
+        return self.full_name 
+
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:  
+            if instance.is_manager:  
+                OccupantProfile.objects.create(user=instance) 
+
+            else:
+                pass
