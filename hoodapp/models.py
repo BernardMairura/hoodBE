@@ -88,3 +88,30 @@ class OccupantProfile(models.Model):
 
             else:
                 pass
+
+
+class Neighborhood(models.Model):
+    name = models.CharField(max_length=50,null=True,blank=True)
+    location = models.CharField(max_length=60)
+    admin = models.ForeignKey("AdminProfile", on_delete=models.CASCADE, related_name='neighborhood')
+    hoodphoto = CloudinaryField('image')
+    body= models.TextField(max_length=100, blank=True)
+    resident_count= models.IntegerField(null=True, blank=True)
+    emergency_contact = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'neighborhood'
+    
+
+    def __str__(self):
+        return f'{self.name} neighborhood'
+
+    def create_neighborhood(self):
+        self.save()
+
+    def delete_neighborhood(self):
+        self.delete()
+
+    @classmethod
+    def find_neighborhood(cls, neighborhood_id):
+        return cls.objects.filter(id=neighborhood_id)
