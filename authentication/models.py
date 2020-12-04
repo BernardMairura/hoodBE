@@ -52,8 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_supervisor = models.BooleanField(default=False)
-    is_manager = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_occupant = models.BooleanField(default=False)
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = ['email']
@@ -76,8 +76,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     #         'email': self.email,
     #         'exp': int(date.strftime('%s')),
     #         'id': self.id,
-    #         'is_supervisor': self.is_supervisor,
-    #         'is_manager': self.is_manager,
+    #         'is_superuser': self.is_superuser,
+    #         'is_admin': self.is_admin,
     #         'is_occupant': self.is_occupant,
     #     }
     #     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')

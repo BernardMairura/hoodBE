@@ -64,8 +64,50 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # List all of the fields that could possibly be included in a request
-        # or response, including fields specified explicitly above.
+        
         fields = ['user_name', 'email',
-                  'password','confirm_password','is_supervisor','is_manager','is_occupant',  'token']
+                  'password','confirm_password','is_superuser','is_admin','is_occupant',  'token']
+
+
+    @classmethod
+        def create(self, data):
+            del data["confirm_password"]
+          
+            return User.objects.create_user(**data)
+
+class LoginSerializer(serializers.Serializer):
+    """Login serializer Class"""
+    user_name = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=128, write_only=True)
+    token = serializers.CharField(max_length=255, read_only=True)
+    @staticmethod
+    def validate(data):
+        user_name = data.get('user_name', None)
+        password = data.get('password', None)
+   
+        if user_name is None:
+            raise serializers.ValidationError(
+                'An user_name is required to log in.'
+            )
+    
+        if password is None:
+            raise serializers.ValidationError(
+                'A password is required to log in.'
+            )
+        
+        user = authenticate(user_name=user_name, password=password)
+        
+        # Raise an exception in this case if no user is returned.
+
+        if user is None:
+            raise serializers.ValidationError(
+                'A user with this user_name and password was not found.'
+            )
+       #returns dictionary of data validated
+        return {
+            'user_name': user.user_name,
+            'email':user.email,
+            'token': user.token,
+        }
+
     
