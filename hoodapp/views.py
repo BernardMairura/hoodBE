@@ -26,4 +26,14 @@ class SuperuserProfileView(APIView):
         except SuperuserProfile.DoesNotExist:
             raise Http404()
 
+class OccupantList(APIView):
+    def get(self, request, format=None):
+        all_resident = OccupantListProfile.objects.all()
+        serializers = OccupantSerializer(all_resident, many=True)
+        return Response(serializers.data)
 
+class BusinessList(APIView):
+    def get(self, request, format=None):
+        all_business = Business.objects.all()
+        serializers = BusinessSerializer(all_business, many=True)
+        return Response(serializers.data)
