@@ -16,10 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view=get_swagger_view(title='hood')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('authentication.urls')),
     path('api/v1/', include('hoodapp.urls')),
+    path('',schema_view)
   
 ]

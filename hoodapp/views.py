@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import SuperuserProfile,AdminProfile,Business
 from .serializer import *
+from django.conf import settings
 
 # Create your views here.
 
