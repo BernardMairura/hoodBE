@@ -1,5 +1,4 @@
-import jwt
-from django.conf import settings
+
 from django.contrib.auth.models import AbstractUser,BaseUserManager,PermissionsMixin
 from django.db import models
 from cloudinary.models import CloudinaryField
@@ -16,7 +15,7 @@ from django.utils.timezone import datetime, timedelta
 
 
 class AdminProfile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='hood_administrator')
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50,null=True,blank=True)
     last_name = models.CharField(max_length=50,null=True,blank=True)
     email = models.EmailField(max_length=254,null=True)
@@ -33,7 +32,7 @@ class AdminProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:  
-            if instance.is_manager:  
+            if instance.is_admin:  
                 AdminProfile.objects.create(user=instance) 
 
             else:
@@ -41,7 +40,7 @@ class AdminProfile(models.Model):
 
 
 class SuperuserProfile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='hood_administrator')
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50,null=True,blank=True)
     last_name = models.CharField(max_length=50,null=True,blank=True)
     bio = models.TextField(max_length=100, blank=True)
@@ -57,7 +56,7 @@ class SuperuserProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:  
-            if instance.is_manager:  
+            if instance.is_superuser:  
                 SuperuserProfile.objects.create(user=instance) 
 
             else:
@@ -65,7 +64,7 @@ class SuperuserProfile(models.Model):
     
 
 class OccupantProfile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True, related_name='neighbor_profile')
+    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=50,null=True,blank=True)
     last_name = models.CharField(max_length=50,null=True,blank=True)
     email = models.EmailField(max_length=254,null=True)
@@ -83,7 +82,7 @@ class OccupantProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:  
-            if instance.is_manager:  
+            if instance.is_occupant:  
                 OccupantProfile.objects.create(user=instance) 
 
             else:
@@ -93,7 +92,7 @@ class OccupantProfile(models.Model):
 class Neighborhood(models.Model):
     name = models.CharField(max_length=50,null=True,blank=True)
     location = models.CharField(max_length=60)
-    admin = models.ForeignKey("AdminProfile", on_delete=models.CASCADE, related_name='neighborhood')
+    admin = models.ForeignKey("AdminProfile", on_delete=models.CASCADE)
     hoodphoto = CloudinaryField('image')
     body= models.TextField(max_length=100, blank=True)
     resident_count= models.IntegerField(null=True, blank=True)
