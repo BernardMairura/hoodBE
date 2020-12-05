@@ -11,3 +11,17 @@ class SuperuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SuperuserProfile
         fields = '__all__'
+
+class OccupantSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = OccupantProfile
+        fields = '__all__'
+
+class BusinessSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Business
+        fields = '__all__'
