@@ -121,8 +121,8 @@ class Business(models.Model):
     name = models.CharField(max_length=120)
     email = models.EmailField(max_length=254)
     body = models.TextField(max_length=100, blank=True)
-    hood_id = models.ForeignKey("Neighborhood", on_delete=models.CASCADE, related_name='business')
-    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True, related_name='neighbor_profile')
+    hood_id = models.ForeignKey("Neighborhood", on_delete=models.CASCADE,null=True )
+    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True)
     location = models.CharField(max_length=60)
 
     def __str__(self):
@@ -142,7 +142,7 @@ class Business(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:  
-            if instance.is_manager:  
+            if instance.is_admin:  
                 Business.objects.create(user=instance) 
 
             else:
