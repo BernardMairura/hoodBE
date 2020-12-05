@@ -70,10 +70,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
     @classmethod
-        def create(self, data):
-            del data["confirm_password"]
-          
-            return User.objects.create_user(**data)
+    def create(self, data):
+        del data["confirm_password"]
+        
+        return User.objects.create_user(**data)
 
 class LoginSerializer(serializers.Serializer):
     """Login serializer Class"""
