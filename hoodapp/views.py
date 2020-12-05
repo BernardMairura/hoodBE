@@ -30,8 +30,9 @@ class SuperuserProfileView(APIView):
         except SuperuserProfile.DoesNotExist:
             raise Http404()
 
-
+    
     def get(self, request, pk, format=None):
+        print(request.user)
         self.check_role(request)
         this_superuser = self.get_superuser(pk)
         serializers = SuperuserSerializer(this_superuser)
