@@ -42,11 +42,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 class User(AbstractBaseUser, PermissionsMixin):
-    # Each `User` needs a human-readable unique identifier that we can use to
-    # represent the `User` in the UI. We want to index this column in the
-    # database to improve lookup performanc    # Each `User` needs a human-readable unique identifier that we can use to
-    # represent the `User` in the UI. We want to index this column in the
-    # database to improve lookup performance.e.
+
 
     user_name = models.CharField(db_index=True, max_length=255, unique=True)
     email = models.EmailField(db_index=True, unique=True)
@@ -57,8 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_occupant = models.BooleanField(default=False)
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = ['email']
-    # Tells Django that the UserManager class defined above should manage
-    # objects of this type.
+   
     objects = UserManager()
     def __str__(self):
         """
