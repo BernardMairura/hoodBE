@@ -9,9 +9,12 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
 from .models import SuperuserProfile,AdminProfile,Business
-from .serializer import SuperuserSerializer
+from .serializer import *
 
 # Create your views here.
+
+
+#Superuser apis
 class SuperuserProfileView(APIView):
     permission_classes = (IsAuthenticated,)
     def check_role(self, request):
@@ -25,6 +28,33 @@ class SuperuserProfileView(APIView):
             return SuperuserProfile.objects.get(pk=pk)
         except SuperuserProfile.DoesNotExist:
             raise Http404()
+
+
+    def get(self, request, pk, format=None):
+        self.check_role(request)
+        this_superuser = self.get_superuser(pk)
+        serializers = SuperuserSerializer(this_superuser)
+        return Response(serializers.data)
+
+    def put(self, request, pk, format=None):
+        self.check_role(request)
+        this_superuser = self.get_supervisor(pk)
+        serializers = SuperuserSerializer(this_superuser, request.data, partial=True)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        self.check_role(request)
+        this_superuser = self.get_superuser(pk)
+        this_superuser.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+  #occupants API      
 
 class OccupantList(APIView):
     def get(self, request, format=None):

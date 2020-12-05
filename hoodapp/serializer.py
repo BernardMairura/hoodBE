@@ -5,6 +5,11 @@ from .models import *
 
 #create serializer models
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('user_name','email','is_superuser','is_admin','is_resident',)
+
 class SuperuserSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
