@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import SuperuserProfile,AdminProfile,Business
 from .serializer import *
+from django.conf import settings
 
 # Create your views here.
 
@@ -62,6 +63,8 @@ class OccupantList(APIView):
         serializers = OccupantSerializer(all_resident, many=True)
         return Response(serializers.data)
 
+
+#Business API
 class BusinessList(APIView):
     def get(self, request, format=None):
         all_business = Business.objects.all()
