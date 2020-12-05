@@ -61,19 +61,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         This string is used when a `User` is printed in the console.
         """
         return self.email
-    # @property
-    # def token(self):
-    #     """
-    #     This method generates and returns a string of the token generated.
-    #     """
-    #     date = datetime.now() + timedelta(hours=24)
-    #     payload = {
-    #         'email': self.email,
-    #         'exp': int(date.strftime('%s')),
-    #         'id': self.id,
-    #         'is_superuser': self.is_superuser,
-    #         'is_admin': self.is_admin,
-    #         'is_occupant': self.is_occupant,
-    #     }
-    #     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    #     return token.decode()
+        
+    @property
+    def token(self):
+        """
+        This method generates and returns a string of the token generated.
+        """
+        date = datetime.now() + timedelta(hours=24)
+        payload = {
+            'email': self.email,
+            'exp': int(date.strftime('%s')),
+            'id': self.id,
+            'is_superuser': self.is_superuser,
+            'is_admin': self.is_admin,
+            'is_occupant': self.is_occupant,
+        }
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        return token.decode()
