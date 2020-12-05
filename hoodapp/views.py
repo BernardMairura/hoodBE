@@ -26,4 +26,4 @@ class SuperuserProfileView(APIView):
         except SuperuserProfile.DoesNotExist:
             raise Http404()
 
-# Create your views here.
+
