@@ -147,6 +147,22 @@ class OccupantProfileView(APIView):
         this_occupant.user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+#all occupants view
+
+class OccupantsView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def check_role(self, request):
+        if request.user.is_superuser or request.user.is_admin:
+            pass
+        else:
+            raise Http404()    
+
+    def get(self, request, format=None):
+        self.check_role(request)
+        all_occupants= ReporteeProfile.objects.all()
+        serializers = ReporteeSerializer(all_occupants, many=True)
+        return Response(serializers.data) 
+
 
 
   #occupants API  List    
