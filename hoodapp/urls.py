@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns=[
     path('superuser/<int:pk>/', views.SuperuserProfileView.as_view()),
+    path('admin/<int:pk>/', views.AdminProfileView.as_view()),
     
 
 ]

@@ -88,8 +88,30 @@ class AdminProfileView(APIView):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+    def delete(self, request, pk, format=None):
+        self.check_role(request)
+        this_admin = self.get_admin(pk)
+        this_admin.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-  #occupants API      
+
+class AdminsView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def check_role(self, request):
+        if request.user.is_superuser:
+            pass
+        else:
+            raise Http404()    
+
+    def get(self, request, format=None):
+        self.check_role(request)
+        all_admins = AdminProfile.objects.all()
+        serializers = AdminSerializer(all_admins, many=True)
+        return Response(serializers.data) 
+
+
+
+  #occupants API  List    
 
 class OccupantList(APIView):
     def get(self, request, format=None):
@@ -98,7 +120,7 @@ class OccupantList(APIView):
         return Response(serializers.data)
 
 
-#Business API
+#Business API List
 class BusinessList(APIView):
     def get(self, request, format=None):
         all_business = Business.objects.all()
