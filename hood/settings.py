@@ -178,6 +178,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+#cors
+
+CORS_ORIGIN_ALLOW_ALL = True 
+
 
 #Include Cloudinary's Python classes in your code:
 import cloudinary
