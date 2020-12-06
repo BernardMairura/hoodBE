@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from django.conf import settings
 import jwt
 
+
 # Create your views here.
 class RegistrationAPIView(generics.CreateAPIView):
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -39,3 +40,7 @@ class LoginAPIView(generics.CreateAPIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)  
+
+
+
+ 
