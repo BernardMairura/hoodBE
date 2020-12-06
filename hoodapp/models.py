@@ -74,6 +74,9 @@ class OccupantProfile(models.Model):
     contact = models.CharField(max_length=15, blank=True)
     date_created=models.DateTimeField(auto_now_add=True)
     hoodname = models.ForeignKey("Neighborhood", on_delete=models.CASCADE,related_name='home', null=True)
+   
+
+    
 
     def __str__(self):
         return self.full_name 
@@ -122,7 +125,7 @@ class Business(models.Model):
     email = models.EmailField(max_length=254)
     body = models.TextField(max_length=100, blank=True)
     hood_id = models.ForeignKey("Neighborhood", on_delete=models.CASCADE,null=True )
-    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True)
+    user=models.OneToOneField(User,on_delete=models.CASCADE, null=True,related_name='profile')
     location = models.CharField(max_length=60)
 
     def __str__(self):

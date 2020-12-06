@@ -17,12 +17,28 @@ class SuperuserSerializer(serializers.ModelSerializer):
         model = SuperuserProfile
         fields = '__all__'
 
+class AdminSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = AdminProfile
+        fields = '__all__'
+
+class NeighborhoodSerializer(serializers.ModelSerializer):
+    admin = AdminSerializer()
+
+    class Meta:
+        model = OccupantProfile
+        fields = '__all__'
+
+
 class OccupantSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
         model = OccupantProfile
         fields = '__all__'
+
 
 class BusinessSerializer(serializers.ModelSerializer):
     user = UserSerializer()
