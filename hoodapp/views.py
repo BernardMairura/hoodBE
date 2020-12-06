@@ -110,6 +110,44 @@ class AdminsView(APIView):
         return Response(serializers.data) 
 
 
+#occupants API View
+class OccupantProfileView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def check_role(self, request):
+        if request.user.is_superuser or request.user.is_admin or request.user.is_occupant:
+            pass
+        else:
+            raise Http404()       
+    
+    def get_occupant(self, pk):
+        try:
+            return OccupantProfile.objects.get(pk=pk)
+        except OccupantProfile.DoesNotExist:
+            raise Http404()    
+
+    def get(self, request, pk, format=None):
+        self.check_role(request)
+        this_occupant = self.get_occupant(pk)
+        serializers = OccupantSerializer(this_occupant)
+        return Response(serializers.data)
+
+    def put(self, request, pk, format=None):
+        self.check_role(request)
+        this_occupant = self.get_occupant(pk)
+        serializers = OccupantSerializer(this_occupant, request.data, partial=True)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        self.check_role(request)
+        this_occupant = self.get_occupant(pk)
+        this_occupant.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
   #occupants API  List    
 
