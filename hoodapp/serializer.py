@@ -28,7 +28,7 @@ class NeighborhoodSerializer(serializers.ModelSerializer):
     admin = AdminSerializer()
 
     class Meta:
-        model = OccupantProfile
+        model =Neighborhood
         fields = '__all__'
 
 
