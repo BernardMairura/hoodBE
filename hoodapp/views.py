@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+# from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
 from .serializer import *
@@ -159,8 +160,8 @@ class OccupantsView(APIView):
 
     def get(self, request, format=None):
         self.check_role(request)
-        all_occupants= ReporteeProfile.objects.all()
-        serializers = ReporteeSerializer(all_occupants, many=True)
+        all_occupants= OccupantProfile.objects.all()
+        serializers = OccupantsSerializer(all_occupants, many=True)
         return Response(serializers.data) 
 
 
@@ -170,8 +171,16 @@ class OccupantsView(APIView):
 class OccupantList(APIView):
     def get(self, request, format=None):
         all_resident = OccupantListProfile.objects.all()
-        serializers = OccupantSerializer(all_resident, many=True)
+        serializers = OccupantsSerializer(all_resident, many=True)
         return Response(serializers.data)
+
+
+    def post(self, request, format=None):
+            serializers = OccupantSerializer(data=request.data)
+            if serializers.is_valid():
+                serializers.save()
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #Business API List
@@ -180,3 +189,42 @@ class BusinessList(APIView):
         all_business = Business.objects.all()
         serializers = BusinessSerializer(all_business, many=True)
         return Response(serializers.data)
+
+
+    def post(self, request, format=None):
+            serializers = BusinessSerializer(data=request.data)
+            if serializers.is_valid():
+                serializers.save()
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class PostList(APIView):
+    def get(self, request, format=None):
+        all_post = Post.objects.all()
+        serializers = PostSerializer(all_post, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = PostSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentList(APIView):
+
+    def get(self, request, format=None):
+        all_comments = Comment.objects.all()
+        serializers = CommentSerializer(all_comments, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = CommentSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
