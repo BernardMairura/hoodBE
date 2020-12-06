@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    
+    'corsheaders',
     'drf_yasg',
     'rest_framework',
     'authentication',
@@ -62,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'hood.urls'
@@ -176,6 +178,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+#cors
+
+CORS_ORIGIN_ALLOW_ALL = True 
+
 
 #Include Cloudinary's Python classes in your code:
 import cloudinary
@@ -237,9 +243,17 @@ cloudinary.config(
 
 
 #rest framework
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.TokenAuthentication',
+#     )
+# }
 
+# REST_FRAMEWORK = {
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'rest_framework.authentication.TokenAuthentication',
+#    ),
+#    'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAdminUser'
+#    ),
+# }
