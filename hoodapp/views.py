@@ -41,7 +41,7 @@ class SuperuserProfileView(APIView):
 
     def put(self, request, pk, format=None):
         self.check_role(request)
-        this_superuser = self.get_supervisor(pk)
+        this_superuser = self.get_superuser(pk)
         serializers = SuperuserSerializer(this_superuser, request.data, partial=True)
         if serializers.is_valid():
             serializers.save()
