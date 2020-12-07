@@ -26,6 +26,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
 class NeighborhoodSerializer(serializers.ModelSerializer):
     admin = AdminSerializer()
+    
 
     class Meta:
         model = Neighborhood

@@ -18,6 +18,7 @@ from django.urls import path,include,re_path
 from django.conf import settings
 from rest_framework_swagger.views import get_swagger_view
 
+
 #swagger
 
 # schema_view=get_swagger_view(title='hood')
@@ -43,6 +44,7 @@ urlpatterns = [
     path('api/v1/', include('authentication.urls')),
     path('api/v1/', include('hoodapp.urls')),
     # path('',schema_view)
+    # path('api-auth/',include('rest_framework.urls')),
 
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path("redoc", schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
