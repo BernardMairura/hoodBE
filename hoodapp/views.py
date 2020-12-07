@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
 from .serializer import *
 from django.conf import settings
-
+# from rest_framework import viewsets
 # Create your views here.
 
 
@@ -166,6 +166,63 @@ class OccupantsView(APIView):
 
 
 
+class NeighborhoodView(APIView):
+    permission_classes=(IsAuthenticated,)
+    def post(self, request):
+        serializer = NeighborhoodSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+     
+    def get_hood(self, request):
+        try:
+            hood_id = request.GET.get('hood_id')
+                
+            return Neighborhood.objects.filter(id = hood_id).first()
+        except Neighborhood.DoesNotExist:
+            raise Http404()
+
+
+    
+
+    def get(self, request):
+        if request.GET.get('hood_id', None):
+            hood_id = request.GET.get('hood_id')
+            hood = self.get_hood(request)
+            if hood != None:
+                serializers = NeighborhoodSerializer(data=request.data)
+                return Response(serializers.data)
+            return Response({'detail':'no neighbourhood with that id'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail':'no hood id provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def put(self, request):
+        if request.GET.get('hood_id', None):
+            hood = self.get_hood(request)
+            if hood != None:
+                serializers = NeighborSerializer(data=request.data)
+
+                if serializers.is_valid():
+                    serializers.save()
+                    return Response(serializers.data)
+                else:
+                    return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail':'no neighbourhood  with that id'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail':'no hood id provided'}, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request):
+        if request.GET.get('hood_id', None):
+            hood = self.get_hood(request)
+            if hood != None:
+                hood.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail':'no hood with that id'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail':'no hood id provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+       
+
+
   #occupants API  List    
 
 class OccupantList(APIView):
@@ -228,3 +285,13 @@ class CommentList(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NeighborhoodList(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        
+        all_hoods = Neighborhood.objects.all()
+        serializers = NeighborhoodSerializer(all_hoods, many=True)
+        return Response(serializers.data)
