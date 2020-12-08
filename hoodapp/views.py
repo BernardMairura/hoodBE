@@ -6,14 +6,26 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import *
+import requests
+from django.contrib.sites.shortcuts import get_current_site
+from rest_framework_simplejwt.tokens import RefreshToken
 # from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
 from .serializer import *
 from django.conf import settings
+import json
+
 # from rest_framework import viewsets
 # Create your views here.
+
+def get_tokens(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 
 #Superuser apis
