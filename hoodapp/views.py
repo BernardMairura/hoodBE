@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import *
 # from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
@@ -14,6 +14,19 @@ from .serializer import *
 from django.conf import settings
 # from rest_framework import viewsets
 # Create your views here.
+
+
+#user accessibility
+def get_tokens(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+def welcome(request):
+
+    return redirect('api/users')
 
 
 #Superuser apis

@@ -14,6 +14,7 @@ from pathlib import Path
 import dj_database_url 
 import django_heroku
 from decouple import config,Csv
+from datetime import timedelta
 
 MODE=config("MODE", default="dev")
 SECRET_KEY = config('SECRET_KEY')
@@ -130,8 +131,14 @@ else:
 }
 
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60)
+}
 
-   REST_FRAMEWORK = {
+
+
+
+REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.backends.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',

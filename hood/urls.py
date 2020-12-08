@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path,include,re_path
 from django.conf import settings
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework_simplejwt import views as jwt_views
 
 
 #swagger
@@ -48,5 +49,8 @@ urlpatterns = [
 
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path("redoc", schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
   
 ]
