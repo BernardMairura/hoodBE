@@ -76,5 +76,5 @@ class User(AbstractBaseUser, PermissionsMixin):
             'is_admin': self.is_admin,
             'is_occupant': self.is_occupant,
         }
-        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        token = jwt.encode(payload, settings.SECRETE_KEY, algorithm='HS256')
         return token.decode()

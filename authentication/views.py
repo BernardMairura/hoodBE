@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response  import Response
 from rest_framework.permissions import AllowAny
 from django.conf import settings
+from django.contrib import auth
 import jwt
 
 
@@ -29,17 +30,27 @@ class RegistrationAPIView(generics.CreateAPIView):
         return Response(return_message, status=status.HTTP_201_CREATED)
 
 class LoginAPIView(generics.CreateAPIView):
-    # Login user class
-    permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
+
     def post(self, request):
-        """
-        Handle user signup
-        """
-        user = request.data
-        serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)  
+        data = request.data
+        user_name = data.get('user_name', '')
+        password = data.get('password', '')
+        user = auth.authenticate(username=user_name, password=password)
+
+        if user:
+            auth_token = jwt.encode(
+                {'user_name': user.username}, settings.SECRET_KEY)
+
+            serializer = UserSerializer(user)
+
+            data = {'user': serializer.data, 'token': auth_token}
+
+            return Response(data, status=status.HTTP_200_OK)
+
+            # SEND RES
+        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 
