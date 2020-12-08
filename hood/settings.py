@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'authentication',
+    'cloudinary',
     'hoodapp',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -164,7 +165,7 @@ SIMPLE_JWT = {
 # }
 
 #JWT
-JWT_SECRETE_KEY=os.environ.get('JWT_SECRETE_KEY')
+JWT_SECRETE_KEY=config('JWT_SECRETE_KEY')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
