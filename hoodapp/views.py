@@ -10,6 +10,7 @@ from rest_framework.permissions import *
 import requests
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework_simplejwt.tokens import RefreshToken
+from .permissions import Superuser,Admin
 # from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
@@ -307,3 +308,14 @@ class NeighborhoodList(APIView):
         all_hoods = Neighborhood.objects.all()
         serializers = NeighborhoodSerializer(all_hoods, many=True)
         return Response(serializers.data)
+
+
+class CreateHood(APIView):
+    permission_classes = (Superuser,)
+
+    def post(self, request):
+        serializer = NeighborhoodSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

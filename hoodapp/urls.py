@@ -24,6 +24,7 @@ urlpatterns=[
     path('post/',views.PostList.as_view()),
     path('Hoodlist/', views.NeighborhoodList.as_view(),name='hood'),
     path('hood/', views.NeighborhoodView.as_view(), name='hoodView'),
+    path('create_hood/', views.CreateHood.as_view(), name='hood_creation'),
     
 
 ]
