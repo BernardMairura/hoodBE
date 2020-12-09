@@ -104,7 +104,12 @@ class Neighborhood(models.Model):
     class Meta:
         db_table = 'neighborhood'
     
+    @property
+    def occupants(self):
+        users = len(self.users.all())
+        return users
 
+        
     def __str__(self):
         return f'{self.name} neighborhood'
 
