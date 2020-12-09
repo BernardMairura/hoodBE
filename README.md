@@ -2,7 +2,7 @@
 
 
 ## Description
-The project is ..........
+The project provides django rest framework end points for the Front end client usage.
 
 ## Setup and Installation Requirements
 * Clone the repo on to your local machine 
