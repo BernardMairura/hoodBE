@@ -11,6 +11,7 @@ import requests
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework_simplejwt.tokens import RefreshToken
 from .permissions import Superuser,Admin
+from django.contrib.auth import get_user_model, login 
 # from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 
 from .models import SuperuserProfile,AdminProfile,Business,Neighborhood
@@ -18,6 +19,8 @@ from .serializer import *
 from django.conf import settings
 import json
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 # from rest_framework import viewsets
 # Create your views here.
 
@@ -239,6 +242,7 @@ class NeighborhoodView(APIView):
   #occupants API  List    
 
 class OccupantList(APIView):
+   
     def get(self, request, format=None):
         all_resident = OccupantListProfile.objects.all()
         serializers = OccupantsSerializer(all_occupants, many=True)
